@@ -37,8 +37,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       const newCart = [...cart];
       const productExists = newCart.find(product => product.id === productId);
       
-      const itemStockResponse = await api.get(`stock?id=${productId}`);
-      const itemStockAmount = itemStockResponse.data[0].amount;
+      const itemStockResponse = await api.get(`/stock/${productId}`);
+      const itemStockAmount = itemStockResponse.data.amount;
 
       if (productExists) {
         if (productExists.amount === itemStockAmount) {
@@ -47,14 +47,15 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         }
         productExists.amount += 1;
       } else {
-        const newProductResponse = await api.get(`products?id=${productId}`);
+        const newProductResponse = await api.get(`/products/${productId}`);
         const newProduct = {
-          ...newProductResponse.data[0],
+          ...newProductResponse.data,
           amount: 1
         }
         newCart.push(newProduct);
       }
       setCart(newCart);
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart))
     } catch {
       toast.error('Erro na adição do produto');
       return;
