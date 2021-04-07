@@ -72,7 +72,6 @@ const Home = (): JSX.Element => {
           </li>
         )
       })}
-      {console.log(cart)}
     </ProductList>
   );
 };
